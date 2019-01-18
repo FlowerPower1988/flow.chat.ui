@@ -6,7 +6,7 @@ import {IAppState} from 'src/redux/state/index';
 import * as actions from 'src/redux/actions/index';
 import { Actions } from 'src/redux/types/Actions';
 import { ContactsList  as ContactsListComponent, IProps as ContactsListComponentProps} from '../components/ContactsList';
-import {IUser, IMainUser} from '../models/interfaces/index';
+import {IContact, IUser} from '../models/interfaces/index';
 
 class ContactsList extends React.Component<IProps,IState>
 {
@@ -17,12 +17,16 @@ class ContactsList extends React.Component<IProps,IState>
         super(props);
     }
 
-    private getAlias(user: IUser): string{
-        let result = user.firstName || ""  + " " + user.lastName || "";
+    private getAlias(user: IContact): string{
+        let result = user.firstName || ""  && " " && user.lastName || "";
         if(result.trim().length === 0){
             result = user.login
         }
         return result;
+    }
+
+    componentDidMount(){
+        this.props.getConacts(5);
     }
 
     public render() {
@@ -30,11 +34,12 @@ class ContactsList extends React.Component<IProps,IState>
             itemsProps: this.props.contacts.map(user => ({
                 displayedAlias: this.getAlias(user),
                 contactId: user.id,
+                description: user.description === undefined ? "": user.description,
                 onIemDoubleClick: () => this.props.startConversation(this.props.mainUser!,user)
             }))
         };
         
-        if(this.props.mainUser && this.props.contacts){
+        if(!this.props.isLoadingContacts){
             return (
                 <ContactsListComponent {...props} />       
             );
@@ -48,14 +53,14 @@ class ContactsList extends React.Component<IProps,IState>
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions> ): IDispatchProps  => { 
     return {
-        startConversation: (mainUser: IMainUser, recipent: IUser)  => dispatch(actions.startConversation(mainUser, recipent)),
+        startConversation: (mainUser: IUser, recipent: IContact)  => dispatch(actions.startConversation(mainUser, recipent)),
         getConacts: (userId: number)  => dispatch(actions.getConactsStart(userId))
     }
 }
     
 const mapStateToProps = (state: IAppState): IStateProps => ({
     contacts: state.contacts.contacts,
-    mainUser: state.mainUser.userData
+    isLoadingContacts: state.contacts.isLoadingContacts,
 });
 
 const ContactsListConnected = connect(
@@ -68,8 +73,9 @@ interface IProps extends IStateProps, IDispatchProps{
 }
 
 interface IStateProps{
-    contacts: Array<IUser>,
-    mainUser?: IMainUser 
+    contacts: Array<IContact>,
+    isLoadingContacts: boolean
+    mainUser?: IUser 
 }
 
 interface IDispatchProps{

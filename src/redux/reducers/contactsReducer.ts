@@ -9,7 +9,7 @@ const initialState: IContactsState = {
   contacts: []
 };
 
-const contacts: Reducer<IContactsState> = (state = initialState, action: Actions) => {
+const contactsReducer: Reducer<IContactsState> = (state = initialState, action: Actions) => {
   switch (action.type) {
     case consts.GET_CONTACTS_START:
       return { ...state, isLoadingContacts: true };
@@ -20,4 +20,4 @@ const contacts: Reducer<IContactsState> = (state = initialState, action: Actions
   }
 }
 
-export { contacts }
+export { contactsReducer as contacts}

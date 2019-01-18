@@ -8,7 +8,7 @@ const initialState: IMainWindowState = {
   isExpanded: false
 };
 
-const mainWindow: Reducer<IMainWindowState> = (state = initialState, action: Actions) => {
+const mainWindowReducer: Reducer<IMainWindowState> = (state = initialState, action: Actions) => {
   switch (action.type) {
     case consts.TOGGLE_MAIN_WINDOW:
       return { ...state, isExpanded: !state.isExpanded };
@@ -17,4 +17,4 @@ const mainWindow: Reducer<IMainWindowState> = (state = initialState, action: Act
   }
 }
 
-export { mainWindow }
+export { mainWindowReducer as mainWindow}

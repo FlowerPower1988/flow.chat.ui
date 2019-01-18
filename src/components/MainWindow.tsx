@@ -1,14 +1,14 @@
 
 import * as React from 'react';
 import { Card, CardBody, Collapse, CardHeader } from 'reactstrap';
-import { ContactsListConnected } from '../containers/ContactsList'
+
 const MainWindow = (props: IProps) => {
     return(
         <Card>
             <CardHeader top width="100%" onClick = {props.onExpanButtonClick} >Text</CardHeader>
                 <Collapse isOpen={props.isExpanded}>
                     <CardBody>
-                        <ContactsListConnected/>
+                        {props.content}
                     </CardBody>
                 </Collapse>
         </Card>
@@ -16,6 +16,7 @@ const MainWindow = (props: IProps) => {
 }
 
 interface IProps {
+    content: JSX.Element
     isExpanded: boolean,
     onExpanButtonClick: () => void;
 }

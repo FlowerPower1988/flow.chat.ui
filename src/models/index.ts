@@ -1,2 +1,2 @@
-export  {IUser} from './interfaces/IUser';
-export  {IMainUser} from './interfaces/IMainUser';
+export  { IContact } from './interfaces/IContact';
+export  { IUser } from './interfaces/IUser';

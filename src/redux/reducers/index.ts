@@ -1,6 +1,4 @@
-
-export * from 'src/redux/reducers/conversations';
-export * from 'src/redux/reducers/contacts';
-export * from 'src/redux/reducers/mainWindow';
-export * from 'src/redux/reducers/conversations';
-export * from 'src/redux/reducers/mainUser';
+export * from 'src/redux/reducers/conversationsReducer';
+export * from 'src/redux/reducers/contactsReducer';
+export * from 'src/redux/reducers/mainWindowReducer';
+export * from 'src/redux/reducers/accountReducer';

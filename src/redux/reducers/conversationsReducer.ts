@@ -8,7 +8,7 @@ const initialState: IConversationsState = {
   isSample: false
 };
 
-const conversations: Reducer<IConversationsState> = (state = initialState, action: Actions) => {
+const conversationsReducer: Reducer<IConversationsState> = (state = initialState, action: Actions) => {
   switch (action.type) {
     case consts.START_CONVERSATION:
       return { ...state, isSample: !state.isSample };
@@ -17,4 +17,4 @@ const conversations: Reducer<IConversationsState> = (state = initialState, actio
   }
 }
 
-export { conversations }
+export { conversationsReducer as conversations}

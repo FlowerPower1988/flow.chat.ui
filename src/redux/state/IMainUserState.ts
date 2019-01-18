@@ -1,7 +1,7 @@
 import '../../models/index';
-import { IMainUser } from '../../models/index';
+import { IUser } from '../../models/index';
 
 export interface IMainUserStoreState {
-    userData?: IMainUser,
+    userData?: IUser,
     isDataLoading: boolean
 };

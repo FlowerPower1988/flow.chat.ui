@@ -5,3 +5,4 @@ export * from 'src/redux/state/IMainWindow';
 export * from 'src/redux/state/IConversations';
 export * from 'src/redux/state/IConversationState';
 export * from 'src/redux/state/IMainUserState';
+export * from 'src/redux/state/IAccountState';

@@ -1,2 +1,2 @@
-export * from './IMainUser';
 export * from './IUser';
+export * from './IContact';

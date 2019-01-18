@@ -1,13 +1,13 @@
 
 import * as consts from 'src/redux/consts/index';
 import {IAction} from 'src/redux/types/IAction';
-import {IUser, IMainUser} from '../../models/interfaces/index';
+import {IContact, IUser} from '../../models/interfaces/index';
 
 
-type StartConversationAction = IAction<'FC_START_CONVERSATION',{mainUser: IMainUser, recipent: IUser}>;
-type Actions = StartConversationAction;
+type StartConversationAction = IAction<'FC_START_CONVERSATION',{mainUser: IUser, recipent: IContact}>;
+type ConversationsActions = StartConversationAction;
     
-const startConversation = (mainUser: IMainUser, recipent: IUser):StartConversationAction => ({
+const startConversation = (mainUser: IUser, recipent: IContact):StartConversationAction => ({
     type: consts.START_CONVERSATION,
     payload: {
         mainUser: mainUser,
@@ -18,5 +18,5 @@ const startConversation = (mainUser: IMainUser, recipent: IUser):StartConversati
 export {
     startConversation,
     StartConversationAction,
-    Actions
+    ConversationsActions
 }

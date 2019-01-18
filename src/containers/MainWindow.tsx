@@ -6,7 +6,8 @@ import { MainWindow as MainWindowComponent } from 'src/components/index';
 import {IAppState} from 'src/redux/state/index';
 import * as actions from 'src/redux/actions/index';
 import { Actions } from 'src/redux/types/Actions';
-
+import { ContactsListConnected } from '../containers/ContactsList';
+import { LoginContainerConnected } from '../containers/LoginContainer';
 class MainWindow extends React.Component<IProps,IState>
 {
     public static defaultProps = {
@@ -19,8 +20,21 @@ class MainWindow extends React.Component<IProps,IState>
     }
 
     public render() {
+        
+        let content;
+        if (this.props.isUserLoggedIn) {
+            content = <ContactsListConnected/>;
+          } else {
+            content = <LoginContainerConnected />;
+          }
+
+
         return (
-            <MainWindowComponent isExpanded={this.props.isExpanded} onExpanButtonClick = {this.props.toggleExpand} />
+            <MainWindowComponent 
+                isExpanded={this.props.isExpanded} 
+                onExpanButtonClick = {this.props.toggleExpand} 
+                content = {content}
+                />
         );
     }
 }
@@ -32,7 +46,8 @@ const mapDispatchToProps = (dispatch: Dispatch<Actions> ): IDispatchProps  => {
 }
     
 const mapStateToProps = (state: IAppState): IStateProps => ({
-    isExpanded: state.mainWindow.isExpanded
+    isExpanded: state.mainWindow.isExpanded,
+    isUserLoggedIn: state.account.isLoggedIn,
 });
 
 const MainWindowConnected = connect(
@@ -45,6 +60,7 @@ interface IProps extends IStateProps, IDispatchProps{
 
 interface IStateProps{
     isExpanded: boolean
+    isUserLoggedIn: boolean
 }
 
 interface IDispatchProps{
