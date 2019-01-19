@@ -24,7 +24,15 @@ class LoginContainer extends React.Component<ILoginContainerProps,ILoginContaine
     }
 
     public render() {
-        return (<LoginForm onLoginButtonClick = {this.onLoginButtonClick.bind(this)} onValueChange = {this.onValueChange.bind(this)}/>);
+        let result;
+        if(this.props.isLoadingToken){
+            result = <div>Loading...</div>
+        }
+        else{
+            result = <LoginForm onLoginButtonClick = {this.onLoginButtonClick.bind(this)} onValueChange = {this.onValueChange.bind(this)}/>
+        }
+
+        return (result);
     }
 }
 

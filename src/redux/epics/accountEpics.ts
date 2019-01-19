@@ -13,10 +13,10 @@ function getToken(action$: ActionsObservable<Actions>) : Observable<Action>  {
     ofType(actionsTypes.GET_TOKEN_START),
     mergeMap<GetTokenStart,any>(
       action  => 
-      ajax.get(`https://localhost:44389/accounts/` ,{password: action.payload!.password, email: action.payload!.email}).pipe(
+      ajax.post(`https://localhost:44389/accounts/tokens` ,{email: action.payload!.email, password: action.payload!.password },{'Content-Type':'application/json'}).pipe(
         map<any,any>(
-          response => 
-            getTokenEnd(response)),
+          result => 
+            getTokenEnd(result.response.token)),
         catchError(
           map(
             error => console.log('error: ', error)))
