@@ -13,3 +13,6 @@ export const GET_CONTACTS_END = 'FC_GET_CONTACTS_END';
 
 export const GET_TOKEN_START = 'FC_GET_TOKEN_START';
 export const GET_TOKEN_END = 'FC_GET_TOKEN_END';
+
+export const TRY_SIGN_IN = 'FC_TRY_SIGN_IN';
+export const SIGN_OUT = 'FC_SIGN_OUT';

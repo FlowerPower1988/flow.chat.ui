@@ -1,2 +1,2 @@
-export * from './contacts';
+export * from './contactsEpic';
 export * from './accountEpics';

@@ -14,10 +14,9 @@ interface IAppComponentState {
   errorInfo: React.ErrorInfo;
 }
 
-
-
 class App extends React.Component<IAppComponentProps,IAppComponentState> {
   public render() {
+
     return (
       <Provider store={this.props.store}>
         <MainWindowConnected />

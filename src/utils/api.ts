@@ -1,98 +1,65 @@
 
-import {  map, catchError  } from 'rxjs/operators';
+import {  map, catchError, mergeMap  } from 'rxjs/operators';
 import { ajax } from 'rxjs/ajax';
-import { getToken } from 'src/utils/factories/tokenFactory';
-
-function defaultOnError(error: any){
-    console.log('error: ', error)
-}
+import { readPersistedToken } from 'src/utils/managers/tokenManager';
+import { ObservableInput } from 'rxjs';
 
 const API_URL: string = 'https://localhost:44389/';
 
-function get(
+const get = (
     endpoint: string, 
-    onResponse: (response: any)=>void = ()=>{},
-    onError: (error: any)=>void = defaultOnError, 
-    headers:object = {}){
-        
-        addAuthorizationHeader(headers);
-  
-        return ajax.get(API_URL + endpoint,headers).pipe(
-            map<any,any>(response => onResponse!(response)),
-            catchError(map(error => onError!(error)))
-        )
+    onResponse?: (response: any)=>ObservableInput<any>,
+    onError?: (error: any)=>void, 
+    headers?:object) => {
+        return sendRequest(endpoint,onResponse,onError,headers,'get');
 } 
 
-function post(
+const post = (
     endpoint: string, 
     body?: any,
-    onResponse: (response: any)=>void = ()=>{},
-    onError: (error: any)=>void = defaultOnError, 
-    headers?:object){
-
-        addAuthorizationHeader(headers);
-  
-        return ajax.post(API_URL + endpoint,body,headers).pipe(
-            map<any,any>(response => onResponse!(response)),
-            catchError(map(error => onError!(error)))
-        )
+    onResponse?: (response: any)=>ObservableInput<any>,
+    onError?: (error: any)=>void, 
+    headers?:object) => {
+        return sendRequest(endpoint,onResponse,onError,headers,'post',body);
 } 
 
-function put(
+const put = (
     endpoint: string, 
     body?: any,
-    onResponse: (response: any)=>void = ()=>{},
-    onError: (error: any)=>void = defaultOnError, 
-    headers?:object){
-
-        addAuthorizationHeader(headers);
-  
-        return ajax.put(API_URL + endpoint,body,headers).pipe(
-            map<any,any>(response => onResponse!(response)),
-            catchError(map(error => onError!(error)))
-        )
+    onResponse?: (response: any)=>ObservableInput<any>,
+    onError?: (error: any)=>void, 
+    headers?:object) => {
+        return sendRequest(endpoint,onResponse,onError,headers,'put',body);
 } 
 
-function patch(
+const patch = (
     endpoint: string, 
     body?: any,
-    onResponse: (response: any)=>void = ()=>{},
-    onError: (error: any)=>void = defaultOnError, 
-    headers?:object){
-
-        addAuthorizationHeader(headers);
-  
-        return ajax.patch(API_URL + endpoint,body,headers).pipe(
-            map<any,any>(response => onResponse!(response)),
-            catchError(map(error => onError!(error)))
-        )
+    onResponse?: (response: any)=>ObservableInput<any>,
+    onError?: (error: any)=>void, 
+    headers?:object) => {
+        return sendRequest(endpoint,onResponse,onError,headers,'patch',body);
 } 
 
-function deleteRequest(
+const deleteRequest = (
     endpoint: string, 
-    onResponse: (response: any)=>void = ()=>{},
-    onError: (error: any)=>void = defaultOnError, 
-    headers:object = {}){
-        
-        addAuthorizationHeader(headers);
-  
-        return ajax.delete(API_URL + endpoint,headers).pipe(
-            map<any,any>(response => onResponse!(response)),
-            catchError(map(error => onError!(error)))
-        )
+    onResponse?: (response: any)=>ObservableInput<any>,
+    onError?: (error: any)=>void , 
+    headers?:object) => {
+        return sendRequest(endpoint,onResponse,onError,headers,'delete');
 } 
 
 
-function request(
+const sendRequest = (
     endpoint: string, 
-    onResponse: (response: any)=>void = ()=>{},
+    onResponse: (response: any)=>ObservableInput<any> = ()=>{ return []},
     onError: (error: any)=>void = defaultOnError, 
     headers:object = {},
     commandType: 'get'|'post'|'patch'|'put'|'delete',
-    body?: any
-    ){
+    body?: any)=>
+    {
         
-        addAuthorizationHeader(headers);
+        addDefaultHeaders(headers);
         let command;
         
         if(commandType === 'get'){
@@ -113,25 +80,34 @@ function request(
             throw "commandType out of range";
         }
 
-
         return command.pipe(
-            map<any,any>(response => onResponse!(response)),
-            catchError(map(error => onError!(error)))
+            mergeMap<any,any>(response => 
+                onResponse!(response)),
+            catchError(map(error => 
+                onError!(error)))
         )
-} 
+}   
 
+const defaultOnError = (error: any) => {
+    console.log('error: ', error)
+}
 
-
-
-
-
-
-function addAuthorizationHeader(headers: object = {}){
-    const token = getToken();
-        
+const addAuthorizationHeader = (headers: object = {}) =>{
+    const token = readPersistedToken();     
     if(!headers.hasOwnProperty('Authorization') && token){
         headers['Authorization'] = `Bearer ${token}`
     }
+}
+
+const addContentTypeHeader = (headers: object = {}) =>{ 
+    if(!headers.hasOwnProperty('Content-Type')){
+        headers['Content-Type'] = `application/json`
+    }
+}
+
+const addDefaultHeaders = (headers: object) => {
+    addAuthorizationHeader(headers);
+    addContentTypeHeader(headers);
 }
 
 export { get, post, put, patch, deleteRequest as delete }

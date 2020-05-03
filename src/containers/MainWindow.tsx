@@ -33,6 +33,7 @@ class MainWindow extends React.Component<IProps,IState>
             <MainWindowComponent 
                 isExpanded={this.props.isExpanded} 
                 onExpanButtonClick = {this.props.toggleExpand} 
+                onLogoutButtonClick = {this.props.signOut} 
                 content = {content}
                 />
         );
@@ -41,7 +42,8 @@ class MainWindow extends React.Component<IProps,IState>
 
 const mapDispatchToProps = (dispatch: Dispatch<Actions> ): IDispatchProps  => { 
     return {
-        toggleExpand: ()  => dispatch(actions.toggleMainWindow()) 
+        toggleExpand: ()  => dispatch(actions.toggleMainWindow()),
+        signOut:() => dispatch(actions.signOut()) 
     }
 }
     
@@ -65,6 +67,7 @@ interface IStateProps{
 
 interface IDispatchProps{
     toggleExpand: typeof actions.toggleMainWindow;
+    signOut: typeof actions.signOut;
 }
 
 interface IState {
